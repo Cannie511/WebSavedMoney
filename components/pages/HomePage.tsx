@@ -26,6 +26,7 @@ const HomePage = () => {
   }
 
   useEffect(() => {
+    fetchMoney();
     resetIfNewDay()
   }, [])
 

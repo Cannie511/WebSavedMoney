@@ -12,7 +12,6 @@ export async function GET(request: Request) {
   const now = new Date();
   const selectedMonth = month !== null ? Number(month) - 1 : now.getMonth();
   const selectedYear = year !== null ? Number(year) : now.getFullYear();
-  console.log(selectedMonth, selectedYear)
   const startOfMonth = new Date(selectedYear, selectedMonth, 1);
   const endOfMonth = new Date(selectedYear, selectedMonth + 1, 1);
   const result = await Money.aggregate([
