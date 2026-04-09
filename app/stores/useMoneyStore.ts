@@ -19,6 +19,7 @@ export const useMoneyStore = create<MoneyState>()(
         try {
           set({loading: true})
           const {total, transaction} = await MoneyService.getSavedMoney(get().month, get().year);
+          
           set({total, transaction})
         } catch (error) {
           console.log("Lỗi khi tải tiền tiết kiệm", error);
