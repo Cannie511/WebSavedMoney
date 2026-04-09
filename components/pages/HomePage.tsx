@@ -11,10 +11,13 @@ import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import DialogListRandom from './DialogListRandom';
 import { Spinner } from '../ui/spinner';
+import LuckyWheel from './LuckyWheel';
+import CountUp from 'react-countup';
 
 const HomePage = () => {
   const today = new Date();
   const [openDialogListRandom, setOpenDialogListRandom] = useState<boolean>(false);
+  const [randomList, setRandomList] = useState<number[]>([]);
   const lastDay = getLastDayOfMonth(today);
   const {total, randomMoneyToday, savedMoneyToday,fetchMoney, savedMoney, resetIfNewDay, loading} = useMoneyStore();
   const handleFetchMoney = async() => {
@@ -31,7 +34,7 @@ const HomePage = () => {
   }, [])
 
   return (
-    <div className='space-y-2 sm:py-0 py-2'>
+    <div className='space-y-2 sm:py-0 py-2 sm:px-0 px-2'>
       <HeaderHomePage/>
       <div className='sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-0 sm:gap-3'>
           <div className='col-span-3 sm:col-span-2'>
@@ -41,21 +44,24 @@ const HomePage = () => {
                         <h3 className='text-xl sm:text-2xl text-white/80 font-semibold'>Tổng tiết kiệm</h3>
                         <div className='flex items-center justify-center space-x-2'>
                           <h1 className='text-3xl sm:text-5xl font-bold text-white text-shadow-lg'>
-                            {formatMoney(total)} đ
+                            <CountUp end={total} duration={1} separator="." /> đ
                           </h1> 
                           <Button variant={'ghost'} onClick={handleFetchMoney} className={'p-2 cursor-pointer'} size={'icon'}>
                             <RefreshCcw className={cn('size-6 text-muted-foreground', loading && "animate-spin")}/>
                           </Button>
                         </div>
                       </div>
-                      <div className='flex flex-col sm:flex-row items-center justify-center'>
+                      <div className='flex flex-col sm:flex-row items-center justify-center space-x-48'>
                         <Image width={300} height={300} src={'/savedPig.png'} alt='savedPig' className='hidden sm:block'/>
-                        <div className='text-center space-y-2 py-2 sm:py-0'>
+                       {/* <div className='text-center space-y-2 py-2 sm:py-0'>
                             <ChartNoAxesCombined className='size-12 sm:size-20 mx-auto text-gradient' />
                             <span className='font-semibold text-lg sm:text-xl tracking-wide text-muted-foreground'>
                               Bạn chưa có mục tiêu tiết kiệm nào
                             </span>
-                        </div>
+                        </div> */}
+                        {randomList.length > 0 && randomMoneyToday === 0 &&
+                          <LuckyWheel rewards={randomList}/>
+                        }
                       </div>
                   </CardHeader>
               </Card>
@@ -74,7 +80,8 @@ const HomePage = () => {
                 <CardHeader className='text-center px-2'>
                     <h3 className='block sm:hidden text-md font-semibold text-muted-foreground'>{formatDate(today, 'fullDate')}</h3>
                     <h3 className='text-xl font-semibold'>Số tiền tiết kiệm hôm nay: </h3>
-                    <h2 className='text-3xl font-extrabold text-green-700'>{savedMoneyToday > 0 ? "+" + formatMoney(savedMoneyToday) : formatMoney(savedMoneyToday)} đ</h2>
+                    <h2 className='text-3xl font-extrabold text-green-700'>{randomMoneyToday > 0 ? "+" + formatMoney(randomMoneyToday) : formatMoney(randomMoneyToday)} đ</h2>
+                    
                 </CardHeader>
                 <CardContent className='py-1 space-y-2 px-2 text-center'>
                   {randomMoneyToday === 0 ? 
@@ -82,35 +89,43 @@ const HomePage = () => {
                       <Button onClick={()=>setOpenDialogListRandom(true)} className='w-full bg-blue-400/70 hover:bg-blue-400 cursor-pointer transition-colors hover:animate-in h-fit p-3'>
                           <Dices className='size-12'/>
                           <div>
-                            <span className='text-lg font-semibold'>Quay Ngẫu Nhiên</span>
-                            <p className='text-sm text-muted-foreground'>Tạo một số tiền ngẫu nhiên</p>
+                            <span className='text-lg font-semibold text-primary'>Chọn Mệnh Giá</span>
+                            <p className='text-sm text-muted-foreground'>Chọn số tiền lớn nhất bạn muốn</p>
                           </div>
                       </Button>
                      )
                     : 
                     (
-                      <Button onClick={handleSavedMoney} disabled={randomMoneyToday === savedMoneyToday || loading} className='w-full bg-green-400/70 hover:bg-green-400 cursor-pointer transition-colors hover:animate-in h-fit p-3'>
-                          {loading ? <Spinner className='size-12'/> : <BadgeDollarSign className='size-12'/>}
-                          <div>
-                            <span className='text-lg font-semibold'>{randomMoneyToday === savedMoneyToday ? "Hôm nay đã tiết kiệm rồi" : "Bỏ Vào Heo Đất"} </span>
-                            <p className='text-sm text-muted-foreground'>Cộng tiền hôm nay vào heo đất</p>
-                          </div>
-                      </Button>
+                      <>
+                        {savedMoneyToday <= 0 ? 
+                          <Button onClick={handleSavedMoney} disabled={randomMoneyToday === savedMoneyToday || loading} className='w-full bg-green-400/70 hover:bg-green-400 cursor-pointer transition-colors hover:animate-in h-fit p-3'>
+                            {loading ? <Spinner className='size-12'/> : <BadgeDollarSign className='size-12'/>}
+                            <div>
+                              <span className='text-lg text-primary font-semibold'>{randomMoneyToday === savedMoneyToday ? "Hôm nay đã tiết kiệm rồi" : "Bỏ Vào Heo Đất"} </span>
+                              <p className='text-sm text-muted-foreground'>Cộng tiền hôm nay vào heo đất</p>
+                            </div>
+                          </Button>
+                          :
+                          <></>
+                        }
+                      </>
+                      
                     )
                   }
                  
-                  
+                  {savedMoneyToday > 0 &&
                     <div className='bg-amber-200 rounded-2xl p-3'>
-                      <h3 className='text-xl text-muted-foreground font-semibold'>{randomMoneyToday !== savedMoneyToday || randomMoneyToday === 0  ? "Mục tiêu hôm nay:" : "Đã hoàn thành"} </h3>
-                      <h2 className={cn("text-2xl font-extrabold", randomMoneyToday !== savedMoneyToday || randomMoneyToday === 0  ? "text-yellow-900" : "text-green-600")}>{formatMoney(randomMoneyToday)} đ</h2>
+                      <h3 className='text-xl text-muted-foreground font-semibold'>{randomMoneyToday !== savedMoneyToday || randomMoneyToday === 0  ? "Mục tiêu hôm nay:" : "Đã hoàn thành 🎉"} </h3>
                     </div>
+                  }
+                    
                 </CardContent>
               </Card>
             </div>
           </div>
       </div>
-      <CalendarComponent lastDay={Number(lastDay)}/>
-      <DialogListRandom open={openDialogListRandom} setOpen={setOpenDialogListRandom} />
+      <CalendarComponent lastDay={Number(lastDay)} />
+      <DialogListRandom open={openDialogListRandom} setOpen={setOpenDialogListRandom} setRandomList={setRandomList}/>
     </div>
   )
 }

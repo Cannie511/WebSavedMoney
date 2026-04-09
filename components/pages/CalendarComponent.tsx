@@ -5,7 +5,7 @@ import { History } from 'lucide-react';
 import { useMoneyStore } from '@/app/stores/useMoneyStore';
 import { cn } from '@/lib/utils';
 import DialogTransaction from './DialogTransaction';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 const CalendarComponent = ({lastDay}:{lastDay: number}) => {
     const today = new Date();

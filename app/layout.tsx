@@ -46,7 +46,7 @@ export default function RootLayout({
         <div className="min-h-screen w-full relative">
       {/* Aurora Dream Soft Harmony */}
         <div
-          className="absolute w-full h-screen inset-0 -z-10"
+          className="absolute w-full h-screen inset-0 -z-10 "
           style={{
             background: `
             radial-gradient(ellipse 80% 60% at 60% 20%, rgba(175, 109, 255, 0.50), transparent 65%),

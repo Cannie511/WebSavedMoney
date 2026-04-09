@@ -8,10 +8,13 @@ import { CircleCheckBig, Dices } from "lucide-react";
 import { Button } from "../ui/button";
 import { randomMoneyRealistic } from "@/lib/helper";
 import { useMoneyStore } from "@/app/stores/useMoneyStore";
+import { setReactDebugChannelForHtmlRequest } from "next/dist/server/dev/debug-channel";
+import { toast } from "sonner";
 
 interface DialogListRandomProps {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
+    setRandomList: Dispatch<SetStateAction<number[]>>;
 }
 
 const listPolyme = [
@@ -23,25 +26,21 @@ const listPolyme = [
     {value: 500000, imgUrl: '/500k.jpg', isSelected: false},
 ]
 
-const DialogListRandom = ({open, setOpen}: DialogListRandomProps) => {
-    const [tempList, setTempList] = useState<any[]>([]);
+const DialogListRandom = ({open, setOpen, setRandomList}: DialogListRandomProps) => {
+    const [maxValue, setMaxValue] = useState<number>(0);
     const handleOnClick = (money:any) => {
         console.log(money)
-        console.log(tempList)
-        if(tempList.find((m) => m.value === money.value)) {
-            const updatedList = tempList.filter((m) => m.value !== money.value)
-            setTempList(updatedList)
-        } else {
-            const updatedList = [...tempList, {...money, isSelected:true}];
-            setTempList(updatedList)
-        }   
+        setMaxValue(money.value);
     }
 
     const handleConfirm = () => {
-        const first = randomMoneyRealistic(tempList.map(t => t.value));
-        const second = randomMoneyRealistic(tempList.map(t => t.value));
-        const randomMoneyToday = first + second
-        useMoneyStore.setState({randomMoneyToday})
+        const temp:number[] = [];
+        for(let i = 0; i<=maxValue; i+=maxValue/10) {
+            if(i !== 0) temp.push(i);
+        }
+        console.log(temp);
+        setRandomList(temp);
+        toast.success("Tạo danh sách quay ngẫu nhiên thành công")
         setOpen(false)
     }
 
@@ -58,15 +57,15 @@ const DialogListRandom = ({open, setOpen}: DialogListRandomProps) => {
                     {listPolyme.map(p => {
                         return (
                             <div key={p.value} onClick={() => handleOnClick(p)} className="flex items-center justify-center cursor-pointer">
-                                <Image width={200} height={200} src={p.imgUrl} alt={p.value.toString()} className={cn(tempList.find(t => t.value === p.value) && "opacity-50 scale-90")}/>
-                                {tempList.find(t => t.value === p.value) && <CircleCheckBig className="size-6 text-green-700 absolute z-10"/>}
+                                <Image width={200} height={200} src={p.imgUrl} alt={p.value.toString()} className={cn(maxValue === p.value && "opacity-50 scale-90")}/>
+                                {maxValue === p.value && <CircleCheckBig className="size-6 text-green-700 absolute z-10"/>}
                             </div>
                         )
                     })}
                 </div>
                 <CardFooter className="p-0">
                     {
-                        tempList.length > 0 && 
+                        maxValue > 0 && 
                         <Button onClick={handleConfirm} className='w-full bg-blue-400/70 hover:bg-blue-400 cursor-pointer transition-colors hover:animate-in h-fit p-3'>
                             <Dices className='size-12'/>
                             <div>

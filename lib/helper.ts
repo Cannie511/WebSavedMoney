@@ -51,7 +51,16 @@ export function formatMoneyVN(amount: number): string {
 export function formatMoney(amount: number): string {
   return new Intl.NumberFormat('vi-VN').format(amount);
 }
-export function randomMoneyRealistic(values: number[]): number {
-  //const values = [10000, 20000, 50000, 100000, 200000, 500000];
-  return values[Math.floor(Math.random() * values.length)];
+
+export function randomMoneyRealistic(max: number): number {
+  const step = 10000;
+  const min = 10000;
+  if(max < min) return 10000;
+  const maxStep = Math.floor(max / step);
+  const minStep = Math.ceil(min / step);
+
+  const randomStep =
+    Math.floor(Math.random() * (maxStep - minStep + 1)) + minStep;
+
+  return randomStep * step;
 }
