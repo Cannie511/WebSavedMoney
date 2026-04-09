@@ -26,6 +26,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SavingPig",
   description: "Saving with Như Thanh",
+  icons: {
+    apple: "/savedPig.png",
+  },
+
 };
 
 export default function RootLayout({
