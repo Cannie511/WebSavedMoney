@@ -6,9 +6,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CircleCheckBig, Dices } from "lucide-react";
 import { Button } from "../ui/button";
-import { randomMoneyRealistic } from "@/lib/helper";
-import { useMoneyStore } from "@/app/stores/useMoneyStore";
-import { setReactDebugChannelForHtmlRequest } from "next/dist/server/dev/debug-channel";
 import { toast } from "sonner";
 
 interface DialogListRandomProps {

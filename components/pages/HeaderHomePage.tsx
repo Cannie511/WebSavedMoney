@@ -1,10 +1,12 @@
 
 import Image from 'next/image'
 import { Card, CardContent } from '../ui/card'
+import { Button } from '../ui/button'
+import { ModeToggle } from '../ui/darkmode-button'
 
 const HeaderHomePage = () => {
   return (
-    <div className='flex items-center justify-between'>
+    <div className='flex items-center justify-between z-10'>
         <Card className='py-2 px-4 w-fit border-transparent shadow-md'>
             <CardContent className='flex items-center justify-center space-x-3 p-0'>
                 <Image src={'https://res.cloudinary.com/dls9vpbow/image/upload/v1774664038/carlodo_chat/avatars/q62lyrppsxzvbrpg1azz.jpg'} 
@@ -15,6 +17,7 @@ const HeaderHomePage = () => {
                 </div>
             </CardContent>
         </Card>
+        <ModeToggle/>
     </div>
     
   )

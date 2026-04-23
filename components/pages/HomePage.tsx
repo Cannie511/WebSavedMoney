@@ -34,13 +34,14 @@ const HomePage = () => {
   }, [])
 
   return (
+
     <div className='space-y-2 sm:py-0 py-2 sm:px-0 px-2'>
       <HeaderHomePage/>
       <div className='sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-0 sm:gap-3'>
           <div className='col-span-3 sm:col-span-2'>
-              <Card className='border-none shadow-lg p-0 bg-blue-100'>
+              <Card className='border-none shadow-lg p-0 dark:bg-blue-500/30 bg-blue-100'>
                   <CardHeader className='p-0'>
-                      <div className='text-center bg-linear-300 from-blue-300 to-purple-400 py-6 space-y-2 rounded-2xl'> 
+                      <div className='text-center bg-linear-300 dark:from-blue-500 dark:to-purple-500 from-blue-300 to-purple-400 py-6 space-y-2 rounded-2xl'> 
                         <h3 className='text-xl sm:text-2xl text-white/80 font-semibold'>Tổng tiết kiệm</h3>
                         <div className='flex items-center justify-center space-x-2'>
                           <h1 className='text-3xl sm:text-5xl font-bold text-white text-shadow-lg'>
@@ -76,7 +77,7 @@ const HomePage = () => {
               </Card>
             </div>
             <div>
-              <Card className='border-none shadow-lg bg-amber-50'>
+              <Card className='border-none shadow-lg dark:bg-slate-700/70 bg-amber-50'>
                 <CardHeader className='text-center px-2'>
                     <h3 className='block sm:hidden text-md font-semibold text-muted-foreground'>{formatDate(today, 'fullDate')}</h3>
                     <h3 className='text-xl font-semibold'>Số tiền tiết kiệm hôm nay: </h3>

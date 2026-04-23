@@ -36,7 +36,6 @@ export async function GET(request: Request) {
       },
     },
   ]);
-  console.log(result)
   return NextResponse.json({
     transaction: result[0].transaction,
     total: result[0].total[0]?.total ?? 0,
